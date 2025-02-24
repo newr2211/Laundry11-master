@@ -12,9 +12,13 @@ class CartScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("ตะกร้าบริการ"),
-        backgroundColor: Colors.blue[50],
-        iconTheme: IconThemeData(color: Colors.blue[700]),
+        title: Text("ตะกร้าบริการ",
+            style: TextStyle(
+                color: Colors.pink[900],
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.pink[900]),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -39,7 +43,7 @@ class CartScreen extends StatelessWidget {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(color: Colors.blue[50]),
+        decoration: BoxDecoration(color: Colors.white),
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +51,7 @@ class CartScreen extends StatelessWidget {
             Text(
               "บริการที่เลือก",
               style: TextStyle(
-                color: Colors.blue[700],
+                color: Colors.pink[900],
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -68,7 +72,7 @@ class CartScreen extends StatelessWidget {
                       ),
                       subtitle: Text(
                         "฿${selectedServices[index].price} x ${selectedServices[index].quantity}",
-                        style: TextStyle(fontSize: 16.0, color: Colors.grey[700]),
+                        style: TextStyle(fontSize: 16.0, color: Colors.black),
                       ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -77,8 +81,8 @@ class CartScreen extends StatelessWidget {
                             icon: Icon(Icons.remove),
                             onPressed: selectedServices[index].quantity > 1
                                 ? () => cart.updateQuantity(
-                                selectedServices[index].service,
-                                selectedServices[index].quantity - 1)
+                                    selectedServices[index].service,
+                                    selectedServices[index].quantity - 1)
                                 : null,
                           ),
                           Text(
@@ -98,7 +102,7 @@ class CartScreen extends StatelessWidget {
                 },
               ),
             ),
-            Divider(color: Colors.blueGrey, thickness: 2.0),
+            Divider(color: Colors.pink[50], thickness: 2.0),
             SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,7 +112,7 @@ class CartScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue[700],
+                    color: Colors.pink[900],
                   ),
                 ),
                 Text(
@@ -116,7 +120,7 @@ class CartScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue[700],
+                    color: Colors.pink[900],
                   ),
                 ),
               ],
@@ -125,28 +129,33 @@ class CartScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: selectedServices.isNotEmpty
                   ? () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Booking(
-                      selectedServices: selectedServices.map((item) => {
-                        "service": item.service,
-                        "quantity": item.quantity,
-                        "price": item.price
-                      }).toList(),
-                      selectedPrices: selectedServices.map((item) => item.price * item.quantity).toList(),
-                      totalPrice: cart.totalPrice,
-                    ),
-                  ),
-                );
-              }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Booking(
+                            selectedServices: selectedServices
+                                .map((item) => {
+                                      "service": item.service,
+                                      "quantity": item.quantity,
+                                      "price": item.price
+                                    })
+                                .toList(),
+                            selectedPrices: selectedServices
+                                .map((item) => item.price * item.quantity)
+                                .toList(),
+                            totalPrice: cart.totalPrice,
+                          ),
+                        ),
+                      );
+                    }
                   : null,
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-                backgroundColor: Colors.orange,
-                minimumSize: Size(double.infinity, 48)
-              ),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0)),
+                  backgroundColor: Colors.pink[200],
+                  minimumSize: Size(double.infinity, 48)),
               child: Text(
                 "ไปที่การจอง",
                 style: TextStyle(

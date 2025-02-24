@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/cart_service.dart';
-import 'detail.dart';  // Import the cart service
+import 'detail.dart'; // Import the cart service
 
 class Service5 extends StatefulWidget {
   @override
@@ -27,24 +27,25 @@ class _Service5State extends State<Service5> {
 
   int get totalPrice {
     int extraServicesPrice = serviceQuantities.entries
-        .map((entry) =>
-    entry.value * (servicePrices[entry.key] ?? pricePerItem))
+        .map(
+            (entry) => entry.value * (servicePrices[entry.key] ?? pricePerItem))
         .fold(0, (prev, amount) => prev + amount);
     return extraServicesPrice;
   }
 
   void updateServiceQuantity(String service, int change) {
     setState(() {
-      serviceQuantities[service] = (serviceQuantities[service]! + change).clamp(0, 99);
+      serviceQuantities[service] =
+          (serviceQuantities[service]! + change).clamp(0, 99);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<CartService>(context);  // Access CartService
+    final cart = Provider.of<CartService>(context); // Access CartService
 
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.only(left: 20, top: 60, right: 20),
         child: Column(
@@ -56,7 +57,9 @@ class _Service5State extends State<Service5> {
               children: [
                 Image.asset("images/77.png", height: 35),
                 SizedBox(width: 10),
-                Text("ซักชุดสูท", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                Text("ซักชุดสูท",
+                    style:
+                        TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
               ],
             ),
             SizedBox(height: 20),
@@ -91,7 +94,8 @@ class _Service5State extends State<Service5> {
                 _buildQuantitySelector(
                     service,
                     serviceQuantities[service]!,
-                        (val) => updateServiceQuantity(service, val - serviceQuantities[service]!)),
+                    (val) => updateServiceQuantity(
+                        service, val - serviceQuantities[service]!)),
             ],
           ],
         ),
@@ -104,7 +108,8 @@ class _Service5State extends State<Service5> {
 
             serviceQuantities.forEach((service, quantity) {
               if (quantity > 0) {
-                cart.addItem(service, servicePrices[service]!, quantity); // ✅ ส่ง quantity ที่ถูกต้อง
+                cart.addItem(service, servicePrices[service]!,
+                    quantity); // ✅ ส่ง quantity ที่ถูกต้อง
               }
             });
 
@@ -118,9 +123,10 @@ class _Service5State extends State<Service5> {
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.pink[200],
             padding: EdgeInsets.symmetric(vertical: 15),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
           child: Text("เพิ่มไปยังตะกร้า",
               style: TextStyle(fontSize: 18, color: Colors.white)),
@@ -129,15 +135,16 @@ class _Service5State extends State<Service5> {
     );
   }
 
-  Widget _buildQuantitySelector(String label, int quantity, Function(int) onQuantityChanged) {
+  Widget _buildQuantitySelector(
+      String label, int quantity, Function(int) onQuantityChanged) {
     int itemPrice = servicePrices[label] ?? pricePerItem;
 
     return Container(
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.pink[50],
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)]),
+          boxShadow: [BoxShadow(color: Colors.pink, blurRadius: 5)]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -146,11 +153,16 @@ class _Service5State extends State<Service5> {
           Row(
             children: [
               Text("฿${quantity * itemPrice}",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue)),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black)),
               Spacer(),
               IconButton(
                   icon: Icon(Icons.remove),
-                  onPressed: quantity > 0 ? () => onQuantityChanged(quantity - 1) : null),
+                  onPressed: quantity > 0
+                      ? () => onQuantityChanged(quantity - 1)
+                      : null),
               Text("$quantity", style: TextStyle(fontSize: 18)),
               IconButton(
                   icon: Icon(Icons.add),
@@ -168,7 +180,8 @@ class _Service5State extends State<Service5> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(label,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           Switch(
             value: value,
             onChanged: onChanged,

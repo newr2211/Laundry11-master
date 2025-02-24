@@ -47,7 +47,7 @@ class _Service4State extends State<Service4> {
     final cart = Provider.of<CartService>(context); // Access CartService
 
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.only(left: 20, top: 60, right: 20),
         child: Column(
@@ -60,7 +60,7 @@ class _Service4State extends State<Service4> {
                 SizedBox(width: 10),
                 Text("เครื่องนอนและอื่นๆ",
                     style:
-                    TextStyle(fontSize: 38, fontWeight: FontWeight.bold)),
+                        TextStyle(fontSize: 38, fontWeight: FontWeight.bold)),
               ],
             ),
             SizedBox(height: 20),
@@ -93,7 +93,7 @@ class _Service4State extends State<Service4> {
                 _buildQuantitySelector(
                     service,
                     serviceQuantities[service]!,
-                        (val) => updateServiceQuantity(
+                    (val) => updateServiceQuantity(
                         service, val - serviceQuantities[service]!)),
             ],
           ],
@@ -107,7 +107,8 @@ class _Service4State extends State<Service4> {
 
             serviceQuantities.forEach((service, quantity) {
               if (quantity > 0) {
-                cart.addItem(service, servicePrices[service]!, quantity); // ✅ ส่ง quantity ที่ถูกต้อง
+                cart.addItem(service, servicePrices[service]!,
+                    quantity); // ✅ ส่ง quantity ที่ถูกต้อง
               }
             });
 
@@ -121,9 +122,10 @@ class _Service4State extends State<Service4> {
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.pink[200],
             padding: EdgeInsets.symmetric(vertical: 15),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
           child: Text("เพิ่มไปยังตะกร้า",
               style: TextStyle(fontSize: 18, color: Colors.white)),
@@ -139,9 +141,9 @@ class _Service4State extends State<Service4> {
     return Container(
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.pink[50],
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)]),
+          boxShadow: [BoxShadow(color: Colors.pink, blurRadius: 5)]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -153,7 +155,7 @@ class _Service4State extends State<Service4> {
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue)),
+                      color: Colors.black)),
               Spacer(),
               IconButton(
                   icon: Icon(Icons.remove),

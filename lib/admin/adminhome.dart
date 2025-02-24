@@ -165,9 +165,9 @@ class _AdminHomeState extends State<AdminHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.white,
       body: isLoading
-          ? Center(child: CircularProgressIndicator(color: Colors.blue))
+          ? Center(child: CircularProgressIndicator(color: Colors.pink[900]))
           : Padding(
               padding:
                   const EdgeInsets.only(top: 70.0, left: 20.0, right: 20.0),
@@ -183,7 +183,7 @@ class _AdminHomeState extends State<AdminHome> {
                           Text(
                             userName,
                             style: TextStyle(
-                              color: Colors.blue[700],
+                              color: Colors.pink[900],
                               fontSize: 48.0,
                               fontWeight: FontWeight.bold,
                             ),
@@ -203,13 +203,13 @@ class _AdminHomeState extends State<AdminHome> {
                     ],
                   ),
                   SizedBox(height: 15.0),
-                  Divider(color: Colors.blue, thickness: 2.0),
+                  Divider(color: Colors.pink[200], thickness: 2.0),
                   SizedBox(height: 10.0),
                   Center(
                     child: Text(
                       "ข้อมูลการจองลูกค้า",
                       style: TextStyle(
-                        color: Colors.blue[800],
+                        color: Colors.pink[900],
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
                       ),
@@ -234,9 +234,9 @@ class _AdminHomeState extends State<AdminHome> {
           return const Center(child: CircularProgressIndicator());
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(
+          return Center(
             child: Text("ไม่มีคำสั่งจอง",
-                style: TextStyle(color: Colors.blue, fontSize: 18)),
+                style: TextStyle(color: Colors.pink[900], fontSize: 18)),
           );
         }
 
@@ -256,23 +256,28 @@ class _AdminHomeState extends State<AdminHome> {
                 _showBookingDetails(context, booking, phoneNumber);
               },
               child: Card(
-                color: Colors.white,
-                shadowColor: Colors.blue[700],
+                color: Colors.pink[50],
+                shadowColor: Colors.pink[900],
                 margin: const EdgeInsets.all(10),
                 child: ListTile(
                   title: Text(
                     "วันที่จอง: ${booking['Date']}",
-                    style: TextStyle(color: Colors.blue[700]),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("ยอดรวม: ฿${booking['TotalPrice']}",
-                          style: TextStyle(color: Colors.blue[900])),
-                      Text("เวลา: ${booking['Time']}",
-                          style: TextStyle(color: Colors.blueGrey[800])),
-                      Text("ที่อยู่จัดส่ง: ${booking['DeliveryAddress']}"),
-                      Text("เบอร์โทร: $phoneNumber"),
+                      Text(
+                        "ยอดรวม: ฿${booking['TotalPrice']}",
+                      ),
+                      Text(
+                        "เวลา: ${booking['Time']}",
+                      ),
+                      Text(
+                        "ที่อยู่จัดส่ง: ${booking['DeliveryAddress']}",
+                      ),
+                      Text(
+                        "เบอร์โทร: $phoneNumber",
+                      ),
                     ],
                   ),
                 ),

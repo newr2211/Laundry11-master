@@ -67,7 +67,7 @@ class _LogInState extends State<LogIn> {
 
       // ล็อกอินผู้ใช้
       UserCredential userCredential =
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: mail,
         password: password,
       );
@@ -128,11 +128,11 @@ class _LogInState extends State<LogIn> {
             padding: const EdgeInsets.only(top: 50.0, left: 30.0),
             height: MediaQuery.of(context).size.height / 2,
             width: double.infinity,
-            decoration: BoxDecoration(color: Colors.blue[50]),
+            decoration: BoxDecoration(color: Colors.pink[50]),
             child: Text(
               "ลงชื่อเข้าใช้",
               style: TextStyle(
-                color: Colors.blue[700],
+                color: Colors.pink[900],
                 fontSize: 32.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -141,7 +141,7 @@ class _LogInState extends State<LogIn> {
           Container(
             padding: const EdgeInsets.all(30.0),
             margin:
-            EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
+                EdgeInsets.only(top: MediaQuery.of(context).size.height / 4),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(

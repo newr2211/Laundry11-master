@@ -74,10 +74,10 @@ class BookingHistory extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("ประวัติการจอง"),
-        backgroundColor: Colors.blue[700], // สี AppBar
+        title: Center(child: const Text("ประวัติการจอง")),
+        backgroundColor: Colors.white, // สี AppBar
       ),
-      backgroundColor: Colors.blue[50], // สีพื้นหลังหน้าจอ
+      backgroundColor: Colors.white, // สีพื้นหลังหน้าจอ
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('Bookings')
@@ -106,24 +106,23 @@ class BookingHistory extends StatelessWidget {
                   _showBookingDetails(context, booking, phoneNumber);
                 },
                 child: Card(
-                  color: Colors.white, // สีการ์ด
-                  shadowColor: Colors.blue[700], // เงาของการ์ด
+                  color: Colors.pink[50], // สีการ์ด
+                  shadowColor: Colors.pink[900], // เงาของการ์ด
                   margin: const EdgeInsets.all(10),
                   child: ListTile(
                     title: Text(
                       "วันที่จอง: ${booking['Date']}",
-                      style: TextStyle(
-                          color: Colors.blue[700]), // เปลี่ยนสีข้อความ
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("ยอดรวม: ฿${booking['TotalPrice']}",
-                            style: TextStyle(color: Colors.blue[900])),
-                        Text("เวลา: ${booking['Time']}",
-                            style: TextStyle(color: Colors.blueGrey[800])),
+                        Text(
+                          "ยอดรวม: ฿${booking['TotalPrice']}",
+                        ),
+                        Text(
+                          "เวลา: ${booking['Time']}",
+                        ),
                         Text("ที่อยู่จัดส่ง: ${booking['DeliveryAddress']}"),
-                        // เพิ่มการแสดงเบอร์โทร
                         Text("เบอร์โทร: $phoneNumber"),
                       ],
                     ),

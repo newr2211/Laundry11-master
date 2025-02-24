@@ -45,7 +45,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.pink[50],
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -55,7 +55,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             Text(
               "แก้ไขรหัสผ่าน",
               style: TextStyle(
-                color: Colors.blue[700],
+                color: Colors.pink[900],
                 fontSize: 30.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -64,7 +64,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             Text(
               "ป้อน Email ของคุณ",
               style: TextStyle(
-                color: Colors.blue[700],
+                color: Colors.pink[900],
                 fontSize: 18.0,
                 fontWeight: FontWeight.w500,
               ),
@@ -122,7 +122,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 15.0),
                 decoration: BoxDecoration(
-                  color: Colors.orange,
+                  color: Colors.pink[200],
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: const Text(

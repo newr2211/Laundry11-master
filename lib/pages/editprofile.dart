@@ -59,7 +59,8 @@ class _EditProfileState extends State<EditProfile> {
         if (isPasswordChanged) {
           UserCredential userCredential = await FirebaseAuth.instance
               .signInWithEmailAndPassword(
-              email: user!.email!, password: currentPasswordController.text);
+                  email: user!.email!,
+                  password: currentPasswordController.text);
 
           if (passwordController.text.isNotEmpty) {
             await user!.updatePassword(passwordController.text);
@@ -68,7 +69,10 @@ class _EditProfileState extends State<EditProfile> {
 
         // อัปเดตข้อมูลใน Firestore
         if (isNameChanged || isNumberChanged) {
-          await FirebaseFirestore.instance.collection('Users').doc(user!.uid).update({
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(user!.uid)
+              .update({
             if (isNameChanged) 'Name': nameController.text,
             if (isNumberChanged) 'Number': numberController.text,
           });
@@ -99,115 +103,120 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("แก้ไขโปรไฟล์"),
-        backgroundColor: Colors.blue[700],
+        title: Center(
+            child: Text("แก้ไขโปรไฟล์",
+                style: TextStyle(
+                    color: Colors.pink[900],
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold))),
+        backgroundColor: Colors.white,
         elevation: 0,
+        automaticallyImplyLeading: false, // ปิดปุ่มลูกศรย้อนกลับ
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
-        child: Center(
-          child: Card(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(25),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildSwitchOption(
-                        "เปลี่ยนชื่อ", isNameChanged, (value) {
-                      setState(() {
-                        isNameChanged = value;
-                      });
-                    }),
-                    if (isNameChanged) ...[
-                      _buildTextField(
-                          "ชื่อ", nameController, Icons.person, "กรุณาใส่ชื่อ"),
-                      SizedBox(height: 20),
-                    ],
-                    _buildSwitchOption(
-                        "เปลี่ยนเบอร์โทร", isNumberChanged, (value) {
-                      setState(() {
-                        isNumberChanged = value;
-                      });
-                    }),
-                    if (isNumberChanged) ...[
-                      _buildTextField("เบอร์โทร", numberController,
-                          Icons.phone, "กรุณาใส่เบอร์โทร",
-                          keyboardType: TextInputType.phone),
-                      SizedBox(height: 20),
-                    ],
-                    _buildSwitchOption(
-                        "เปลี่ยนรหัสผ่าน", isPasswordChanged, (value) {
-                      setState(() {
-                        isPasswordChanged = value;
-                      });
-                    }),
-                    if (isPasswordChanged) ...[
-                      _buildTextField(
-                          "รหัสผ่านปัจจุบัน",
-                          currentPasswordController,
-                          Icons.lock,
-                          "กรอกรหัสผ่านปัจจุบัน",
-                          obscureText: true),
-                      SizedBox(height: 20),
-                      _buildTextField(
-                          "รหัสผ่านใหม่",
-                          passwordController,
-                          Icons.lock,
-                          "กรอกรหัสผ่านใหม่",
-                          obscureText: true),
-                      SizedBox(height: 20),
-                      _buildTextField(
-                          "ยืนยันรหัสผ่าน",
-                          confirmPasswordController,
-                          Icons.lock_outline,
-                          "ยืนยันรหัสผ่าน",
-                          obscureText: true),
-                      SizedBox(height: 30),
-                    ],
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _updateProfile,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue[700],
-                          padding: EdgeInsets.symmetric(vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+              padding: EdgeInsets.all(20.0),
+              child: Center(
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(25),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSwitchOption("เปลี่ยนชื่อ", isNameChanged,
+                              (value) {
+                            setState(() {
+                              isNameChanged = value;
+                            });
+                          }),
+                          if (isNameChanged) ...[
+                            _buildTextField("ชื่อ", nameController,
+                                Icons.person, "กรุณาใส่ชื่อ"),
+                            SizedBox(height: 20),
+                          ],
+                          _buildSwitchOption("เปลี่ยนเบอร์โทร", isNumberChanged,
+                              (value) {
+                            setState(() {
+                              isNumberChanged = value;
+                            });
+                          }),
+                          if (isNumberChanged) ...[
+                            _buildTextField("เบอร์โทร", numberController,
+                                Icons.phone, "กรุณาใส่เบอร์โทร",
+                                keyboardType: TextInputType.phone),
+                            SizedBox(height: 20),
+                          ],
+                          _buildSwitchOption(
+                              "เปลี่ยนรหัสผ่าน", isPasswordChanged, (value) {
+                            setState(() {
+                              isPasswordChanged = value;
+                            });
+                          }),
+                          if (isPasswordChanged) ...[
+                            _buildTextField(
+                                "รหัสผ่านปัจจุบัน",
+                                currentPasswordController,
+                                Icons.lock,
+                                "กรอกรหัสผ่านปัจจุบัน",
+                                obscureText: true),
+                            SizedBox(height: 20),
+                            _buildTextField("รหัสผ่านใหม่", passwordController,
+                                Icons.lock, "กรอกรหัสผ่านใหม่",
+                                obscureText: true),
+                            SizedBox(height: 20),
+                            _buildTextField(
+                                "ยืนยันรหัสผ่าน",
+                                confirmPasswordController,
+                                Icons.lock_outline,
+                                "ยืนยันรหัสผ่าน",
+                                obscureText: true),
+                            SizedBox(height: 30),
+                          ],
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: _updateProfile,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.pink[200],
+                                padding: EdgeInsets.symmetric(vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Text(
+                                "บันทึกการเปลี่ยนแปลง",
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          "บันทึกการเปลี่ยนแปลง",
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
-  Widget _buildSwitchOption(String label, bool value, Function(bool) onChanged) {
+  Widget _buildSwitchOption(
+      String label, bool value, Function(bool) onChanged) {
     return Row(
       children: [
         Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: Colors.blue[700],
+          activeColor: Colors.pink[900],
         ),
         Text(label, style: TextStyle(fontSize: 16)),
       ],
@@ -230,7 +239,7 @@ class _EditProfileState extends State<EditProfile> {
           obscureText: obscureText,
           keyboardType: keyboardType,
           decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: Colors.blue[700]),
+            prefixIcon: Icon(icon, color: Colors.pink[900]),
             hintText: label,
             filled: true,
             fillColor: Colors.white,

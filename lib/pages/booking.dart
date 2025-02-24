@@ -136,7 +136,7 @@ class _BookingState extends State<Booking> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.white,
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Padding(
@@ -164,20 +164,14 @@ class _BookingState extends State<Booking> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
-      children: [
-        IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: Colors.blue[700]),
-          onPressed: () => Navigator.pop(context),
-        ),
-        Text(
-          "เลือกวันที่และเวลา",
-          style: TextStyle(
-              fontSize: 22.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue[700]),
-        ),
-      ],
+    return Center(
+      child: Text(
+        "เลือกวันที่และเวลา",
+        style: TextStyle(
+            fontSize: 22.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.pink[900]),
+      ),
     );
   }
 
@@ -185,11 +179,14 @@ class _BookingState extends State<Booking> {
     return Container(
       padding: EdgeInsets.all(15.0),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(15)),
+          color: Colors.pink[50], borderRadius: BorderRadius.circular(15)),
       child: Column(
         children: [
           Text("เลือกวันที่",
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.pink[900])),
           SizedBox(height: 10.0),
           TableCalendar(
             focusedDay: _selectedDate,
@@ -215,17 +212,17 @@ class _BookingState extends State<Booking> {
       child: Container(
         padding: EdgeInsets.all(15.0),
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(15)),
+            color: Colors.pink[50], borderRadius: BorderRadius.circular(15)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.alarm, color: Colors.black),
+            Icon(Icons.alarm, color: Colors.pink[900]),
             SizedBox(width: 15.0),
             Text(_selectedTime.format(context),
                 style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black)),
+                    color: Colors.pink[900])),
           ],
         ),
       ),
@@ -236,12 +233,15 @@ class _BookingState extends State<Booking> {
     return Container(
       padding: EdgeInsets.all(15.0),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(15)),
+          color: Colors.pink[50], borderRadius: BorderRadius.circular(15)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("ที่อยู่จัดส่ง",
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.pink[900])),
           TextField(
             onChanged: (value) => setState(() {
               deliveryAddress = value;
@@ -262,7 +262,7 @@ class _BookingState extends State<Booking> {
         padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.pink[200],
         minimumSize: Size(double.infinity, 48),
       ),
       child: Text(

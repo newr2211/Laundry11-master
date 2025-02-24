@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.white,
       body: isLoading
           ? Center(child: CircularProgressIndicator(color: Colors.blue))
           : SingleChildScrollView(
@@ -95,14 +95,14 @@ class _HomeState extends State<Home> {
                           children: [
                             Text("ยินดีให้บริการ",
                                 style: TextStyle(
-                                    color: Colors.blue,
+                                    color: Colors.pink[900],
                                     fontSize: 24.0,
                                     fontWeight: FontWeight.w500)),
                             Row(
                               children: [
                                 Text(userName,
                                     style: TextStyle(
-                                        color: Colors.blueAccent,
+                                        color: Colors.pink[700],
                                         fontSize: 32.0,
                                         fontWeight: FontWeight.bold)),
                                 IconButton(
@@ -126,11 +126,11 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     SizedBox(height: 10.0),
-                    Divider(color: Colors.grey, thickness: 1.5),
+                    Divider(color: Colors.pink[200], thickness: 1.5),
                     SizedBox(height: 10.0),
                     Text("บริการ",
                         style: TextStyle(
-                            color: Colors.blue[700],
+                            color: Colors.pink[900],
                             fontSize: 22.0,
                             fontWeight: FontWeight.bold)),
                     SizedBox(height: 10.0),

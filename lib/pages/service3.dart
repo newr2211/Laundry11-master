@@ -59,28 +59,27 @@ class _Service3State extends State<Service3> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("images/77.png", height: 35),
+                Image.asset("images/31.png", height: 35),
                 SizedBox(width: 10),
-                Text("รีดเท่านั้น", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                Text("รีดเท่านั้น",
+                    style:
+                        TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
               ],
             ),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("images/11.png", height: 35),
+                Image.asset("images/31.png", height: 35),
                 SizedBox(width: 10),
                 Icon(Icons.add),
                 SizedBox(width: 10),
-                Image.asset("images/12.png", height: 35),
+                Image.asset("images/32.png", height: 35),
                 SizedBox(width: 10),
                 Icon(Icons.add),
                 SizedBox(width: 10),
-                Image.asset("images/13.png", height: 35),
+                Image.asset("images/33.png", height: 35),
                 SizedBox(width: 10),
-                Icon(Icons.add),
-                SizedBox(width: 10),
-                Image.asset("images/14.png", height: 35),
               ],
             ),
             SizedBox(height: 20),
@@ -95,7 +94,7 @@ class _Service3State extends State<Service3> {
                 _buildQuantitySelector(
                     service,
                     serviceQuantities[service]!,
-                        (val) => updateServiceQuantity(
+                    (val) => updateServiceQuantity(
                         service, val - serviceQuantities[service]!)),
               SizedBox(height: 10),
             ],
@@ -110,7 +109,8 @@ class _Service3State extends State<Service3> {
 
             serviceQuantities.forEach((service, quantity) {
               if (quantity > 0) {
-                cart.addItem(service, servicePrices[service]!, quantity); // ✅ ส่ง quantity ที่ถูกต้อง
+                cart.addItem(service, servicePrices[service]!,
+                    quantity); // ✅ ส่ง quantity ที่ถูกต้อง
               }
             });
 
@@ -124,9 +124,10 @@ class _Service3State extends State<Service3> {
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.pink[200],
             padding: EdgeInsets.symmetric(vertical: 15),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
           child: Text("เพิ่มไปยังตะกร้า",
               style: TextStyle(fontSize: 18, color: Colors.white)),
@@ -142,9 +143,9 @@ class _Service3State extends State<Service3> {
     return Container(
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.pink[50],
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)]),
+          boxShadow: [BoxShadow(color: Colors.pink, blurRadius: 5)]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -156,7 +157,7 @@ class _Service3State extends State<Service3> {
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue)),
+                      color: Colors.black)),
               Spacer(),
               IconButton(
                   icon: Icon(Icons.remove),

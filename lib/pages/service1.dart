@@ -2,7 +2,7 @@ import 'package:Laundry/pages/bottome_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/cart_service.dart';
-import 'detail.dart';  // ใช้หน้า CartScreen สำหรับแสดงรายการตะกร้า
+import 'detail.dart'; // ใช้หน้า CartScreen สำหรับแสดงรายการตะกร้า
 
 class Service1 extends StatefulWidget {
   @override
@@ -31,7 +31,7 @@ class _Service1State extends State<Service1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.only(left: 20, top: 60, right: 20),
         child: Column(
@@ -41,28 +41,30 @@ class _Service1State extends State<Service1> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("images/77.png", height: 35),
+                Image.asset("images/111.png", height: 35),
                 SizedBox(width: 10),
-                Text("ซัก-พับ", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                Text("ซัก-พับ",
+                    style:
+                        TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
               ],
             ),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("images/11.png", height: 35),
+                Image.asset("images/112.png", height: 35),
                 SizedBox(width: 10),
                 Icon(Icons.add),
                 SizedBox(width: 10),
-                Image.asset("images/12.png", height: 35),
+                Image.asset("images/113.png", height: 35),
                 SizedBox(width: 10),
                 Icon(Icons.add),
                 SizedBox(width: 10),
-                Image.asset("images/13.png", height: 35),
+                Image.asset("images/114.png", height: 35),
                 SizedBox(width: 10),
                 Icon(Icons.add),
                 SizedBox(width: 10),
-                Image.asset("images/14.png", height: 35),
+                Image.asset("images/115.png", height: 35),
               ],
             ),
             SizedBox(height: 20),
@@ -73,14 +75,13 @@ class _Service1State extends State<Service1> {
                   serviceQuantities[service] = value ? 1 : 0;
                 });
               }),
-
               if (serviceQuantities[service]! > 0)
                 _buildQuantitySelector(
                     service,
                     serviceQuantities[service]!,
-                        (val) => setState(() {
-                      serviceQuantities[service] = val;
-                    })),
+                    (val) => setState(() {
+                          serviceQuantities[service] = val;
+                        })),
             ],
           ],
         ),
@@ -93,7 +94,8 @@ class _Service1State extends State<Service1> {
 
             serviceQuantities.forEach((service, quantity) {
               if (quantity > 0) {
-                cart.addItem(service, servicePrices[service]!, quantity); // ✅ ส่ง quantity ที่ถูกต้อง
+                cart.addItem(service, servicePrices[service]!,
+                    quantity); // ✅ ส่ง quantity ที่ถูกต้อง
               }
             });
 
@@ -107,9 +109,10 @@ class _Service1State extends State<Service1> {
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.pink[200],
             padding: EdgeInsets.symmetric(vertical: 15),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
           child: Text("เพิ่มไปยังตะกร้า",
               style: TextStyle(fontSize: 18, color: Colors.white)),
@@ -125,9 +128,9 @@ class _Service1State extends State<Service1> {
     return Container(
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.pink[50],
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)]),
+          boxShadow: [BoxShadow(color: Colors.pink, blurRadius: 5)]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -139,7 +142,7 @@ class _Service1State extends State<Service1> {
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue)),
+                      color: Colors.black)),
               Spacer(),
               IconButton(
                   icon: Icon(Icons.remove),

@@ -97,7 +97,7 @@ class _SignUpState extends State<SignUp> {
             padding: EdgeInsets.only(top: 50.0, left: 30.0),
             height: MediaQuery.of(context).size.height / 2,
             decoration: BoxDecoration(
-              color: Colors.blue[50],
+              color: Colors.pink[50],
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(40),
                   bottomRight: Radius.circular(40)),
@@ -106,7 +106,7 @@ class _SignUpState extends State<SignUp> {
             child: Text(
               "สร้างบัญชีของคุณ",
               style: TextStyle(
-                  color: Colors.blue[700],
+                  color: Colors.pink[900],
                   fontSize: 32.0,
                   fontWeight: FontWeight.bold),
             ),
