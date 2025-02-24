@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "344552312153",
+    "project_id": "laundry-acc",
+    "storage_bucket": "laundry-acc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344552312153:android:5e44db414b6413fd9ed048",
+        "android_client_info": {
+          "package_name": "com.example.tucksalonapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMueFinsHlA7BP1uuu3o0afUjM1hlYQWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
