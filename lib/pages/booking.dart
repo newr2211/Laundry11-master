@@ -1,5 +1,3 @@
-import 'package:Laundry/pages/bottome_nav_bar.dart';
-import 'package:Laundry/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,61 +20,10 @@ class Booking extends StatefulWidget {
 }
 
 class _BookingState extends State<Booking> {
-  String? name, email, phoneNumber, additionalMessage, deliveryAddress;
+  String? name, email, phoneNumber, deliveryAddress;
   bool isLoading = true;
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
-
-  // ฟังก์ชันดึงข้อมูลผู้ใช้
-  Future<void> getUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      setState(() {
-        isLoading = false;
-      });
-      return;
-    }
-    try {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(user.uid)
-          .get();
-      if (userDoc.exists && userDoc.data() != null) {
-        var data = userDoc.data() as Map<String, dynamic>;
-        setState(() {
-          name = data['Name'] ?? 'ไม่ระบุชื่อ';
-          email = data['Email'] ?? 'ไม่ระบุอีเมล';
-          phoneNumber =
-              data['Number'] ?? 'ไม่ระบุเบอร์โทร'; // เปลี่ยนเป็น 'Number'
-          isLoading = false;
-        });
-
-        // 🔥 เช็คและอัปเดตเบอร์โทรใน 'Bookings' ถ้ายังไม่มี
-        QuerySnapshot bookingSnapshot = await FirebaseFirestore.instance
-            .collection('Bookings')
-            .where('Email', isEqualTo: email)
-            .get();
-
-        for (var doc in bookingSnapshot.docs) {
-          await doc.reference.update({
-            'Number': phoneNumber, // อัปเดตฟิลด์ 'Number' ใน Bookings
-          });
-        }
-      } else {
-        setState(() {
-          name = 'ไม่ระบุชื่อ';
-          email = 'ไม่ระบุอีเมล';
-          phoneNumber = 'ไม่ระบุเบอร์โทร';
-          isLoading = false;
-        });
-      }
-    } catch (e) {
-      print("Error fetching user data: $e");
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
 
   @override
   void initState() {
@@ -84,47 +31,127 @@ class _BookingState extends State<Booking> {
     getUserData();
   }
 
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked =
-        await showTimePicker(context: context, initialTime: _selectedTime);
-    if (picked != null) {
-      setState(() {
-        _selectedTime = picked;
-      });
+  Future<void> getUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      setState(() => isLoading = false);
+      return;
+    }
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
+          .get();
+      if (userDoc.exists) {
+        var data = userDoc.data() as Map<String, dynamic>;
+        setState(() {
+          name = data['Name'] ?? 'ไม่ระบุชื่อ';
+          email = data['Email'] ?? 'ไม่ระบุอีเมล';
+          phoneNumber = data['Number'] ?? 'ไม่ระบุเบอร์โทร';
+          deliveryAddress = data['Address'] ?? 'ไม่ระบุที่อยู่';
+        });
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 
-  Future<void> _bookService() async {
-    if (name == null || email == null || phoneNumber == null) {
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked =
+    await showTimePicker(context: context, initialTime: _selectedTime);
+    if (picked != null) {
+      setState(() => _selectedTime = picked);
+    }
+  }
+
+  Future<void> _checkExistingBookingAndBook() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      QuerySnapshot bookingSnapshot = await FirebaseFirestore.instance
+          .collection("Bookings")
+          .where("Email", isEqualTo: email)
+          .where("Date", isEqualTo: _selectedDate.toString().split(' ')[0])
+          .where("Status", isEqualTo: "รอดำเนินการ")
+          .get();
+
+      if (bookingSnapshot.docs.isNotEmpty) {
+        _showReplaceBookingDialog(bookingSnapshot.docs.first);
+      } else {
+        _confirmBooking();
+      }
+    } catch (error) {
+      print("Error checking existing booking: $error");
+    }
+  }
+
+  void _showReplaceBookingDialog(QueryDocumentSnapshot oldBooking) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("แจ้งเตือนการจอง"),
+          content: Text(
+              "คุณมีการจองวันที่ ${_selectedDate.toString().split(' ')[0]} แล้ว ต้องการยกเลิกและจองใหม่หรือไม่?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("ไม่"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _cancelOldBookingAndBookNew(oldBooking);
+              },
+              child: Text("ใช่, จองใหม่"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _cancelOldBookingAndBookNew(QueryDocumentSnapshot oldBooking) async {
+    try {
+      await FirebaseFirestore.instance.collection("Bookings").doc(oldBooking.id).update({
+        "Status": "ยกเลิก",
+      });
+      _confirmBooking();
+    } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("กรุณากรอกข้อมูลทั้งหมดก่อนทำการจอง"),
+        content: Text("เกิดข้อผิดพลาดในการยกเลิกคิวเก่า: $error"),
         backgroundColor: Colors.red,
       ));
-      return;
     }
+  }
+
+  Future<void> _confirmBooking() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
 
     Map<String, dynamic> userBookingMap = {
-      "Services": widget.selectedServices, // ข้อมูลบริการที่เลือก
-      "Prices": widget.selectedPrices, // ข้อมูลราคาบริการ
-      "TotalPrice": widget.totalPrice, // ยอดรวม
-      "Date": _selectedDate.toString().split(' ')[0], // วัน
-      "Time": _selectedTime.format(context), // เวลา
+      "Services": widget.selectedServices,
+      "Prices": widget.selectedPrices,
+      "TotalPrice": widget.totalPrice,
+      "Date": _selectedDate.toString().split(' ')[0],
+      "Time": _selectedTime.format(context),
       "Username": name,
       "Email": email,
-      "Number": phoneNumber, // ✅ เพิ่มฟิลด์เบอร์โทรเข้าไป
+      "Number": phoneNumber,
       "DeliveryAddress": deliveryAddress ?? '',
+      "Status": "รอดำเนินการ",
     };
 
     try {
-      await FirebaseFirestore.instance
-          .collection("Bookings")
-          .add(userBookingMap);
+      await FirebaseFirestore.instance.collection("Bookings").add(userBookingMap);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("จองบริการสำเร็จ!"),
         backgroundColor: Colors.green,
       ));
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => BottomNavBar()));
+      Navigator.pop(context, true);
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("เกิดข้อผิดพลาดในการจอง: $error"),
@@ -140,137 +167,58 @@ class _BookingState extends State<Booking> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeader(context),
-                    SizedBox(height: 30.0),
-                    _buildDatePicker(),
-                    SizedBox(height: 20.0),
-                    _buildTimePicker(),
-                    SizedBox(height: 20.0),
-                    _buildDeliveryAddressField(),
-                    SizedBox(height: 20.0),
-                    SizedBox(height: 40.0),
-                    _buildBookButton(),
-                  ],
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  "เลือกวันที่และเวลา",
+                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.pink[900]),
                 ),
               ),
-            ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    return Center(
-      child: Text(
-        "เลือกวันที่และเวลา",
-        style: TextStyle(
-            fontSize: 22.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.pink[900]),
-      ),
-    );
-  }
-
-  Widget _buildDatePicker() {
-    return Container(
-      padding: EdgeInsets.all(15.0),
-      decoration: BoxDecoration(
-          color: Colors.pink[50], borderRadius: BorderRadius.circular(15)),
-      child: Column(
-        children: [
-          Text("เลือกวันที่",
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.pink[900])),
-          SizedBox(height: 10.0),
-          TableCalendar(
-            focusedDay: _selectedDate,
-            firstDay: DateTime.now(),
-            lastDay: DateTime.utc(2030, 1, 1),
-            selectedDayPredicate: (day) => isSameDay(day, _selectedDate),
-            onDaySelected: (day, _) => setState(() => _selectedDate = day),
-            calendarStyle: CalendarStyle(
-              selectedDecoration:
-                  BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
-              todayDecoration:
-                  BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-            ),
+              SizedBox(height: 30.0),
+              TableCalendar(
+                focusedDay: _selectedDate,
+                firstDay: DateTime.now(),
+                lastDay: DateTime.utc(2030, 1, 1),
+                selectedDayPredicate: (day) => isSameDay(day, _selectedDate),
+                onDaySelected: (day, _) => setState(() => _selectedDate = day),
+                calendarStyle: CalendarStyle(
+                  selectedDecoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
+                  todayDecoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              GestureDetector(
+                onTap: () => _selectTime(context),
+                child: Container(
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(color: Colors.pink[50], borderRadius: BorderRadius.circular(15)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.alarm, color: Colors.pink[900]),
+                      SizedBox(width: 15.0),
+                      Text(_selectedTime.format(context),
+                          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.pink[900])),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 40.0),
+              ElevatedButton(
+                onPressed: _checkExistingBookingAndBook,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 15.0),
+                  backgroundColor: Colors.pink[200],
+                  minimumSize: Size(double.infinity, 48),
+                ),
+                child: Text("จองบริการ", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTimePicker() {
-    return GestureDetector(
-      onTap: () => _selectTime(context),
-      child: Container(
-        padding: EdgeInsets.all(15.0),
-        decoration: BoxDecoration(
-            color: Colors.pink[50], borderRadius: BorderRadius.circular(15)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.alarm, color: Colors.pink[900]),
-            SizedBox(width: 15.0),
-            Text(_selectedTime.format(context),
-                style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.pink[900])),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDeliveryAddressField() {
-    return Container(
-      padding: EdgeInsets.all(15.0),
-      decoration: BoxDecoration(
-          color: Colors.pink[50], borderRadius: BorderRadius.circular(15)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("ที่อยู่จัดส่ง",
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.pink[900])),
-          TextField(
-            onChanged: (value) => setState(() {
-              deliveryAddress = value;
-            }),
-            decoration: InputDecoration(
-                hintText: "กรุณากรอกที่อยู่ของคุณ",
-                border: OutlineInputBorder()),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBookButton() {
-    return ElevatedButton(
-      onPressed: _bookService,
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-        backgroundColor: Colors.pink[200],
-        minimumSize: Size(double.infinity, 48),
-      ),
-      child: Text(
-        "จองบริการ",
-        style: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
         ),
       ),
     );

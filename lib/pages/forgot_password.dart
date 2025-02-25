@@ -62,7 +62,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             ),
             const SizedBox(height: 20.0),
             Text(
-              "ป้อน Email ของคุณ",
+              "ป้อนอีเมลของคุณ",
               style: TextStyle(
                 color: Colors.pink[900],
                 fontSize: 18.0,
@@ -96,7 +96,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Email",
+                    hintText: "อีเมล",
                     hintStyle: const TextStyle(fontSize: 18.0),
                     prefixIcon: const Icon(
                       Icons.mail_outline,
@@ -126,7 +126,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: const Text(
-                  "ส่ง Email",
+                  "ส่งอีเมล",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18.0,

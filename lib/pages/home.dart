@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
           : SingleChildScrollView(
               child: Container(
                 padding:
-                    EdgeInsets.only(left: 20, top: 80, right: 20, bottom: 20),
+                    EdgeInsets.only(left: 20, top: 60, right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -144,7 +144,7 @@ class _HomeState extends State<Home> {
                           imagePath: 'images/111.png',
                           serviceName: 'ซัก-พับ',
                         ),
-                        SizedBox(width: 30.0),
+                        SizedBox(width: 15.0),
                         serviceTile(
                           goto: Service2(),
                           color: Colors.pinkAccent,
@@ -153,7 +153,7 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 15.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -163,7 +163,7 @@ class _HomeState extends State<Home> {
                           imagePath: 'images/55.png',
                           serviceName: 'รีดเท่านั้น',
                         ),
-                        SizedBox(width: 30.0),
+                        SizedBox(width: 15.0),
                         serviceTile(
                           goto: Service4(),
                           color: Colors.yellowAccent,
@@ -172,7 +172,7 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 15.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

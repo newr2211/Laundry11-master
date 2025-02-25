@@ -105,12 +105,12 @@ class _LogInState extends State<LogIn> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Error'),
+          title: const Text('ข้อผิดพลาด'),
           content: Text(errorMessage),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
+              child: const Text('ปิด'),
             ),
           ],
         ),
@@ -125,7 +125,7 @@ class _LogInState extends State<LogIn> {
       body: Stack(
         children: [
           Container(
-            padding: const EdgeInsets.only(top: 50.0, left: 30.0),
+            padding: const EdgeInsets.only(top: 80.0, left: 30.0),
             height: MediaQuery.of(context).size.height / 2,
             width: double.infinity,
             decoration: BoxDecoration(color: Colors.pink[50]),
@@ -154,18 +154,17 @@ class _LogInState extends State<LogIn> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Email",
+                  const Text("อีเมล",
                       style: TextStyle(
                           color: Color(0xFFB91635),
                           fontSize: 23.0,
                           fontWeight: FontWeight.w500)),
                   TextFormField(
                     controller: emailcontroller,
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'กรุณาใส่ E-mail'
-                        : null,
+                    validator: (value) =>
+                        value == null || value.isEmpty ? 'กรุณาใส่อีเมล' : null,
                     decoration: const InputDecoration(
-                        hintText: "Email",
+                        hintText: "อีเมล",
                         prefixIcon: Icon(Icons.mail_outline)),
                   ),
                   const SizedBox(height: 40.0),
@@ -177,7 +176,7 @@ class _LogInState extends State<LogIn> {
                   TextFormField(
                     controller: passwordcontroller,
                     validator: (value) => value == null || value.isEmpty
-                        ? 'กรุณาใส่ Password'
+                        ? 'กรุณาใส่รหัสผ่าน'
                         : null,
                     decoration: const InputDecoration(
                       hintText: "รหัสผ่าน",
@@ -240,7 +239,7 @@ class _LogInState extends State<LogIn> {
                       const Text("ยังไม่มีบัญชี?",
                           style: TextStyle(
                               color: Color(0xFF311937),
-                              fontSize: 17.0,
+                              fontSize: 18.0,
                               fontWeight: FontWeight.w500)),
                       const SizedBox(width: 5),
                       GestureDetector(
@@ -251,11 +250,13 @@ class _LogInState extends State<LogIn> {
                                 builder: (context) => const SignUp()),
                           );
                         },
-                        child: const Text("สมัครบัญชี",
-                            style: TextStyle(
-                                color: Color(0Xff621d3c),
-                                fontSize: 22.0,
-                                fontWeight: FontWeight.bold)),
+                        child: const Text(
+                          "สมัครบัญชี",
+                          style: TextStyle(
+                              color: Color(0Xff621d3c),
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),

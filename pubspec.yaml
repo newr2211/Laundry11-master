@@ -38,7 +38,10 @@ dependencies:
   numberpicker: ^2.1.2
   flutter_svg: ^2.0.17
   provider: ^6.1.2
-
+  lottie:
+  awesome_dialog:
+  animate_do:
+  glassmorphism:
 
 dev_dependencies:
   flutter_test:
