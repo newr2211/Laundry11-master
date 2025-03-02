@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:thaiqr/thaiqr.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Booking extends StatefulWidget {
   final List<Map<String, dynamic>> selectedServices;
@@ -27,6 +26,8 @@ class _BookingState extends State<Booking> {
   bool isLoading = true;
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
+  TimeOfDay _paymentSelectTime =
+      TimeOfDay.now(); // เวลาที่เลือกสำหรับ QR พร้อมเพย์
   String? selectedPaymentMethod;
   String? selectedDeliveryMethod;
 
@@ -68,6 +69,15 @@ class _BookingState extends State<Booking> {
         await showTimePicker(context: context, initialTime: _selectedTime);
     if (picked != null) {
       setState(() => _selectedTime = picked);
+    }
+  }
+
+  Future<void> _selectPaymentTime(BuildContext context) async {
+    final TimeOfDay? picked =
+        await showTimePicker(context: context, initialTime: _paymentSelectTime);
+    if (picked != null) {
+      setState(() =>
+          _paymentSelectTime = picked); // เลือกเวลาใหม่สำหรับ QR พร้อมเพย์
     }
   }
 
@@ -170,6 +180,9 @@ class _BookingState extends State<Booking> {
       "DeliveryMethod": selectedDeliveryMethod,
       "StatusDate": "กำลังคำนวณเวลา",
       "Payment": getPaymentStatus(),
+      "PaymentSelectTime": selectedPaymentMethod == "พร้อมเพย์"
+          ? _paymentSelectTime.format(context)
+          : null, // If payment is PromptPay, set the selected time, else null
     };
 
     try {
@@ -224,31 +237,14 @@ class _BookingState extends State<Booking> {
                     Text(
                         'ยอดที่ต้องชำระ: ${widget.totalPrice + (selectedDeliveryMethod == 'ส่งถึงที่' ? 200 : 0)} บาท'),
                     SizedBox(height: 20),
-
-                    // ปุ่มอัปโหลดรูปภาพ
                     ElevatedButton.icon(
                       onPressed: () async {
-                        final picker = ImagePicker();
-                        final pickedFile =
-                            await picker.pickImage(source: ImageSource.gallery);
-
-                        if (pickedFile != null) {
-                          setState(() {
-                            uploadedImage =
-                                File(pickedFile.path); // อัปเดตรูปที่เลือก
-                          });
-                        }
+                        await _selectPaymentTime(context); // เลือกเวลา
                       },
-                      icon: Icon(Icons.upload_file),
-                      label: Text("อัปโหลดสลิป"),
+                      icon: Icon(Icons.access_time),
+                      label: Text("เลือกเวลาสำหรับชำระเงิน"),
                     ),
-
                     SizedBox(height: 10),
-
-                    // แสดงตัวอย่างรูปภาพที่อัปโหลด (ถ้ามี)
-                    if (uploadedImage != null)
-                      Image.file(uploadedImage!,
-                          height: 100, fit: BoxFit.cover),
                   ],
                 ),
               ),
@@ -260,15 +256,11 @@ class _BookingState extends State<Booking> {
                   },
                   child: Text("ยกเลิก"),
                 ),
-
-                // ปุ่มยืนยันการชำระเงิน (เปิดใช้งานเมื่อมีการอัปโหลดรูป)
                 ElevatedButton(
-                  onPressed: uploadedImage == null
-                      ? null // ปิดปุ่มหากยังไม่มีรูป
-                      : () {
-                          Navigator.pop(context);
-                          _checkExistingBookingAndBook();
-                        },
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _checkExistingBookingAndBook();
+                  },
                   child: Text("ยืนยันการชำระเงิน"),
                 ),
               ],

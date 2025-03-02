@@ -58,13 +58,24 @@ class _AdminHomeState extends State<AdminHome> {
         .toList();
 
     String userName = booking['Username'] ?? 'ไม่ระบุ';
-    String bookingStatus = booking['Status'] ?? 'รอดำเนินการ';
+    String bookingStatus = booking['Status'] ?? 'รอดดำเนินการ';
+    String statusDate = booking['StatusDate'] ?? 'กำลังดำเนินการ';
+    String payment = booking['Payment'] ?? 'รอดดำเนินการ';
+    String paymentSelectTime =
+        booking['PaymentSelectTime'] ?? 'ไม่ระบุ'; // เพิ่มข้อมูลเวลา
 
-    // 🔥 ตรวจสอบให้แน่ใจว่า bookingStatus อยู่ในตัวเลือกที่กำหนด
     List<String> statusOptions = ["กำลังดำเนินการ", "ยกเลิก", "เสร็จสิ้น"];
-    String selectedStatus = statusOptions.contains(bookingStatus)
+    String selectedBookingStatus = statusOptions.contains(bookingStatus)
         ? bookingStatus
         : "กำลังดำเนินการ";
+
+    List<String> serviceStatusOptions = ["2-3 ชั่วโมง", "1 วัน"];
+    String selectedStatusDate =
+        serviceStatusOptions.contains(statusDate) ? statusDate : "2-3 ชั่วโมง";
+
+    List<String> paymentStatusOptions = ["ชำระเสร็จสิ้น", "กำลังตรวจสอบ"];
+    String selectedPaymentStatus =
+        paymentStatusOptions.contains(payment) ? payment : "กำลังตรวจสอบ";
 
     showDialog(
       context: context,
@@ -102,11 +113,19 @@ class _AdminHomeState extends State<AdminHome> {
                     Text(
                         "📍 ที่อยู่จัดส่ง: ${booking['DeliveryAddress'] ?? 'ไม่ระบุ'}"),
                     const SizedBox(height: 10),
-                    // 🔥 Dropdown เปลี่ยนสถานะ (เฉพาะ 3 สถานะ)
-                    const Text("📌 สถานะ:",
+                    // แสดงเวลาที่เลือกชำระ ถ้าไม่ใช่การชำระเงินสด
+                    if (payment != 'ชำระเงินสด') ...[
+                      Text(
+                        "⏳ เวลาที่เลือกชำระ: $paymentSelectTime",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                    // สถานะการจอง
+                    const Text("📌 สถานะการจอง:",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     DropdownButton<String>(
-                      value: selectedStatus,
+                      value: selectedBookingStatus,
                       items: statusOptions.map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -116,7 +135,47 @@ class _AdminHomeState extends State<AdminHome> {
                       onChanged: (newValue) {
                         if (newValue != null) {
                           setState(() {
-                            selectedStatus = newValue;
+                            selectedBookingStatus = newValue;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    // สถานะการบริการ
+                    const Text("📌 สถานะการบริการ:",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    DropdownButton<String>(
+                      value: selectedStatusDate,
+                      items: serviceStatusOptions.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        if (newValue != null) {
+                          setState(() {
+                            selectedStatusDate = newValue;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    // สถานะการชำระเงิน
+                    const Text("📌 สถานะการชำระเงิน:",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    DropdownButton<String>(
+                      value: selectedPaymentStatus,
+                      items: paymentStatusOptions.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        if (newValue != null) {
+                          setState(() {
+                            selectedPaymentStatus = newValue;
                           });
                         }
                       },
@@ -127,10 +186,14 @@ class _AdminHomeState extends State<AdminHome> {
                 ),
               ),
               actions: [
-                // 🔥 ปุ่มอัปเดตสถานะ
                 TextButton(
                   onPressed: () {
-                    _updateBookingStatus(booking['id'], selectedStatus);
+                    _updateBookingStatus(
+                      booking['id'],
+                      selectedBookingStatus,
+                      selectedStatusDate,
+                      selectedPaymentStatus,
+                    );
                     Navigator.of(context).pop(); // ปิด Dialog
                   },
                   child: const Text("อัปเดตสถานะ",
@@ -150,13 +213,18 @@ class _AdminHomeState extends State<AdminHome> {
     );
   }
 
-// ✅ ฟังก์ชันอัปเดตสถานะลง Firestore
-  void _updateBookingStatus(String bookingId, String newStatus) async {
+// ฟังก์ชันอัปเดตสถานะลง Firestore
+  void _updateBookingStatus(String bookingId, String newBookingStatus,
+      String newServiceStatus, String newPaymentStatus) async {
     try {
       await FirebaseFirestore.instance
           .collection('Bookings')
           .doc(bookingId)
-          .update({'Status': newStatus});
+          .update({
+        'Status': newBookingStatus,
+        'StatusDate': newServiceStatus,
+        'Payment': newPaymentStatus,
+      });
     } catch (e) {
       print("❌ Error updating status: $e");
     }
