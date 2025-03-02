@@ -140,50 +140,50 @@ class _HomeState extends State<Home> {
                       children: [
                         serviceTile(
                           goto: Service1(),
-                          color: Colors.blue[700]!,
+                          color: Colors.pink[50]!,
                           imagePath: 'images/111.png',
-                          serviceName: 'ซัก-พับ',
+                          serviceName: 'ซักพับ',
                         ),
                         SizedBox(width: 30.0),
                         serviceTile(
                           goto: Service2(),
-                          color: Colors.pinkAccent,
+                          color: Colors.pink[50]!,
                           imagePath: 'images/44.png',
                           serviceName: 'ซักรองเท้า',
                         ),
                       ],
                     ),
-                    SizedBox(height: 30.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        serviceTile(
-                          goto: Service3(),
-                          color: Colors.cyanAccent,
-                          imagePath: 'images/55.png',
-                          serviceName: 'รีดเท่านั้น',
-                        ),
-                        SizedBox(width: 30.0),
-                        serviceTile(
-                          goto: Service4(),
-                          color: Colors.yellowAccent,
-                          imagePath: 'images/66.png',
-                          serviceName: 'เครื่องนอนและอื่นๆ',
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        serviceTile(
-                          goto: Service5(),
-                          color: Colors.blueGrey,
-                          imagePath: 'images/77.png',
-                          serviceName: 'ซักชุดสูท',
-                        ),
-                      ],
-                    ),
+                    // SizedBox(height: 30.0),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     serviceTile(
+                    //       goto: Service3(),
+                    //       color: Colors.cyanAccent,
+                    //       imagePath: 'images/55.png',
+                    //       serviceName: 'รีดเท่านั้น',
+                    //     ),
+                    //     SizedBox(width: 30.0),
+                    //     serviceTile(
+                    //       goto: Service4(),
+                    //       color: Colors.yellowAccent,
+                    //       imagePath: 'images/66.png',
+                    //       serviceName: 'เครื่องนอนและอื่นๆ',
+                    //     ),
+                    //   ],
+                    // ),
+                    // SizedBox(height: 30.0),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     serviceTile(
+                    //       goto: Service5(),
+                    //       color: Colors.blueGrey,
+                    //       imagePath: 'images/77.png',
+                    //       serviceName: 'ซักชุดสูท',
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),

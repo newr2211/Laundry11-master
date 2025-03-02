@@ -46,7 +46,15 @@ class BookingHistory extends StatelessWidget {
                     "📍 ที่อยู่จัดส่ง: ${booking['DeliveryAddress'] ?? 'ไม่ระบุ'}"),
                 const SizedBox(height: 10),
                 Text(
-                  "📌 สถานะ: ${booking['Status'] ?? 'รอดำเนินการ'}",
+                  "📌 สถานะการจอง: ${booking['Status'] ?? 'รอดำเนินการ'}",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "📌 สถานะการบริการ: ${booking['StatusDate'] ?? 'กำลังคำนวณเวลา'}",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "📌 การชำระเงิน: ${booking['Payment']}",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),

@@ -38,6 +38,11 @@ dependencies:
   numberpicker: ^2.1.2
   flutter_svg: ^2.0.17
   provider: ^6.1.2
+  animated_text_kit:
+  iconsax:
+  thaiqr:
+  image_picker: ^1.1.2
+  firebase_storage: ^12.4.4
 
 
 dev_dependencies:

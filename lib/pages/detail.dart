@@ -2,6 +2,7 @@ import 'package:Laundry/pages/bottome_nav_bar.dart';
 import 'package:Laundry/pages/booking.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import '../services/cart_service.dart';
 
 class CartScreen extends StatelessWidget {
@@ -9,6 +10,7 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cart = Provider.of<CartService>(context);
     final List<CartItem> selectedServices = cart.items;
+    final currencyFormat = NumberFormat("#,##0.00", "th_TH");
 
     return Scaffold(
       appBar: AppBar(
@@ -20,17 +22,8 @@ class CartScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.pink[900]),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => BottomNavBar()),
-            );
-          },
-        ),
         actions: [
-          if (selectedServices.isNotEmpty)
+          if (selectedServices.isNotEmpty && selectedServices.length > 1)
             TextButton(
               onPressed: () {
                 cart.clear();
@@ -41,10 +34,11 @@ class CartScreen extends StatelessWidget {
               ),
             ),
         ],
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -58,8 +52,9 @@ class CartScreen extends StatelessWidget {
             ),
             SizedBox(height: 10.0),
             Expanded(
-              child: ListView.builder(
+              child: ListView.separated(
                 itemCount: selectedServices.length,
+                separatorBuilder: (context, index) => Divider(),
                 itemBuilder: (context, index) {
                   return Card(
                     color: Colors.white,
@@ -71,7 +66,7 @@ class CartScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 18.0, color: Colors.black),
                       ),
                       subtitle: Text(
-                        "฿${selectedServices[index].price} x ${selectedServices[index].quantity}",
+                        "฿${currencyFormat.format(selectedServices[index].price)} x ${selectedServices[index].quantity}",
                         style: TextStyle(fontSize: 16.0, color: Colors.black),
                       ),
                       trailing: Row(
@@ -85,9 +80,14 @@ class CartScreen extends StatelessWidget {
                                     selectedServices[index].quantity - 1)
                                 : null,
                           ),
-                          Text(
-                            "${selectedServices[index].quantity}",
-                            style: TextStyle(fontSize: 18.0),
+                          AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            child: Text(
+                              "${selectedServices[index].quantity}",
+                              key: ValueKey<int>(
+                                  selectedServices[index].quantity),
+                              style: TextStyle(fontSize: 18.0),
+                            ),
                           ),
                           IconButton(
                             icon: Icon(Icons.add),
@@ -116,7 +116,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "${cart.totalPrice}฿",
+                  "${currencyFormat.format(cart.totalPrice)}฿",
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -128,8 +128,8 @@ class CartScreen extends StatelessWidget {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: selectedServices.isNotEmpty
-                  ? () {
-                      Navigator.push(
+                  ? () async {
+                      final bool? bookingCompleted = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => Booking(
@@ -147,6 +147,15 @@ class CartScreen extends StatelessWidget {
                           ),
                         ),
                       );
+
+                      if (bookingCompleted == true) {
+                        cart.clear();
+
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BottomNavBar()));
+                      }
                     }
                   : null,
               style: ElevatedButton.styleFrom(

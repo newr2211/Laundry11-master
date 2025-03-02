@@ -10,15 +10,17 @@ class Service2 extends StatefulWidget {
 
 class _Service2State extends State<Service2> {
   Map<String, int> serviceQuantities = {
-    "ซักรองเท้า": 0,
-    "น้ำหอมรองเท้า": 0,
-    "ทำความสะอาดด้วยเทคนิคพิเศษ": 0,
+    "ซักรองเท้าผ้าใบ,หนัง": 0,
+    "ซักรองเท้าหนังคัตชู": 0,
+    "ซักรองเท้าบูธ": 0,
+    "ซักรองเท้าแบรนด์เนม": 0,
   };
 
   Map<String, int> servicePrices = {
-    "ซักรองเท้า": 400,
-    "น้ำหอมรองเท้า": 150,
-    "ทำความสะอาดด้วยเทคนิคพิเศษ": 200,
+    "ซักรองเท้าผ้าใบ,หนัง": 199,
+    "ซักรองเท้าหนังคัตชู": 250,
+    "ซักรองเท้าบูธ": 200,
+    "ซักรองเท้าแบรนด์เนม": 259,
   };
 
   int get totalPrice {
@@ -38,12 +40,21 @@ class _Service2State extends State<Service2> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(left: 20, top: 60, right: 20),
+        padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // แสดงหัวข้อของบริการ
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -55,26 +66,6 @@ class _Service2State extends State<Service2> {
               ],
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("images/21.png", height: 35),
-                SizedBox(width: 10),
-                Icon(Icons.add),
-                SizedBox(width: 10),
-                Image.asset("images/22.png", height: 35),
-                SizedBox(width: 10),
-                Icon(Icons.add),
-                SizedBox(width: 10),
-                Image.asset("images/23.png", height: 35),
-                SizedBox(width: 10),
-                Icon(Icons.add),
-                SizedBox(width: 10),
-                Image.asset("images/24.png", height: 35),
-              ],
-            ),
-            SizedBox(height: 20),
-
             for (var service in serviceQuantities.keys) ...[
               _buildSwitch(service, serviceQuantities[service]! > 0, (value) {
                 setState(() {
@@ -99,8 +90,7 @@ class _Service2State extends State<Service2> {
 
             serviceQuantities.forEach((service, quantity) {
               if (quantity > 0) {
-                cart.addItem(service, servicePrices[service]!,
-                    quantity); // ✅ ส่ง quantity ที่ถูกต้อง
+                cart.addItem(service, servicePrices[service]!, quantity);
               }
             });
 

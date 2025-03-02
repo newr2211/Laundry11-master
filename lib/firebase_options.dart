@@ -83,5 +83,4 @@ class DefaultFirebaseOptions {
     authDomain: 'laundry-acc.firebaseapp.com',
     storageBucket: 'laundry-acc.firebasestorage.app',
   );
-
 }

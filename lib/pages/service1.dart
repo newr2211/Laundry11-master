@@ -2,7 +2,7 @@ import 'package:Laundry/pages/bottome_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/cart_service.dart';
-import 'detail.dart'; // ใช้หน้า CartScreen สำหรับแสดงรายการตะกร้า
+import 'detail.dart';
 
 class Service1 extends StatefulWidget {
   @override
@@ -11,64 +11,59 @@ class Service1 extends StatefulWidget {
 
 class _Service1State extends State<Service1> {
   Map<String, int> serviceQuantities = {
-    "ซัก-พับ": 0,
+    "ซักพับ": 0,
     "รีดผ้า": 0,
     "ขจัดคราบ": 0,
-    "ให้ผ้าขาวยิ่งขาว": 0,
-    "ให้ผ้าดำยิ่งดำ": 0,
-    "ให้ยีนส์ยิ่งน้ำเงิน": 0,
+    "ซักแห้ง": 0,
+    "ซักผ้าม่าน": 0,
+    "ซักสูท": 0,
+    "กางเกงสูท,กางเกง,กระโปรง": 0,
+    "ชุดเดรส": 0,
+    "เน็คไท,ผ้าพันคอ": 0,
   };
 
   Map<String, int> servicePrices = {
-    "ซัก-พับ": 25,
+    "ซักพับ": 25,
     "รีดผ้า": 15,
     "ขจัดคราบ": 20,
-    "ให้ผ้าขาวยิ่งขาว": 15,
-    "ให้ผ้าดำยิ่งดำ": 15,
-    "ให้ยีนส์ยิ่งน้ำเงิน": 25,
+    "ซักแห้ง": 15,
+    "ซักผ้าม่าน": 15,
+    "ซักสูท": 25,
+    "กางเกงสูท,กางเกง,กระโปรง": 30,
+    "ชุดเดรส,จั๊มป์สูท,กระโปรง": 30,
+    "เน็คไท,ผ้าพันคอ": 25,
   };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(left: 20, top: 60, right: 20),
+        padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // แสดงหัวข้อของบริการ
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset("images/111.png", height: 35),
                 SizedBox(width: 10),
-                Text("ซัก-พับ",
+                Text("ซักพับ",
                     style:
                         TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
               ],
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("images/112.png", height: 35),
-                SizedBox(width: 10),
-                Icon(Icons.add),
-                SizedBox(width: 10),
-                Image.asset("images/113.png", height: 35),
-                SizedBox(width: 10),
-                Icon(Icons.add),
-                SizedBox(width: 10),
-                Image.asset("images/114.png", height: 35),
-                SizedBox(width: 10),
-                Icon(Icons.add),
-                SizedBox(width: 10),
-                Image.asset("images/115.png", height: 35),
-              ],
-            ),
-            SizedBox(height: 20),
-
             for (var service in serviceQuantities.keys) ...[
               _buildSwitch(service, serviceQuantities[service]! > 0, (value) {
                 setState(() {
@@ -94,8 +89,7 @@ class _Service1State extends State<Service1> {
 
             serviceQuantities.forEach((service, quantity) {
               if (quantity > 0) {
-                cart.addItem(service, servicePrices[service]!,
-                    quantity); // ✅ ส่ง quantity ที่ถูกต้อง
+                cart.addItem(service, servicePrices[service]!, quantity);
               }
             });
 
