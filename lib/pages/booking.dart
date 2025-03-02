@@ -227,7 +227,7 @@ class _BookingState extends State<Booking> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ThaiQRWidget(
-                      mobileOrId: "0952628431",
+                      mobileOrId: "0643206546",
                       amount: (widget.totalPrice +
                               (selectedDeliveryMethod == 'ส่งถึงที่' ? 200 : 0))
                           .toString(),
